@@ -19,10 +19,18 @@ app.use(
     {
       "GET /weather": {
         // USDC amount in dollars
-        price: "$0.001",
+        price: "$0.003",
         // network: "base" // uncomment for Base mainnet
         // network: "solana" // uncomment for Solana mainnet
         network: "base-sepolia",
+        asset: {
+          address: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
+          decimals: 18,
+          eip712: {
+            name: "META Forwarder",
+            version: "1",
+          },
+        }
       },
       "/premium/*": {
         // Define atomic amounts in any EIP-3009 token

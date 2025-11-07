@@ -63,6 +63,7 @@ app.get("/verify", (req: Request, res: Response) => {
 app.post("/verify", async (req: Request, res: Response) => {
   try {
     const body: VerifyRequest = req.body;
+    console.log("paymentRequirements", body.paymentRequirements);
     const paymentRequirements = PaymentRequirementsSchema.parse(body.paymentRequirements);
     const paymentPayload = PaymentPayloadSchema.parse(body.paymentPayload);
 
@@ -134,6 +135,7 @@ app.post("/settle", async (req: Request, res: Response) => {
     const paymentRequirements = PaymentRequirementsSchema.parse(body.paymentRequirements);
     const paymentPayload = PaymentPayloadSchema.parse(body.paymentPayload);
 
+    console.log("THe PAYMENT REQUIREMENTS: ",paymentRequirements)
     // use the correct private key based on the requested network
     let signer: Signer;
     if (SupportedEVMNetworks.includes(paymentRequirements.network)) {
