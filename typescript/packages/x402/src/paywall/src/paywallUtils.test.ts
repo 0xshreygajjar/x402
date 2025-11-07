@@ -28,7 +28,7 @@ const baseSepoliaRequirement: PaymentRequirements = {
   ...baseRequirement,
   network: "base-sepolia",
   description: "Base Sepolia resource",
-  asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
 };
 
 const solanaRequirement: PaymentRequirements = {

@@ -81,7 +81,7 @@ vi.mock("x402/shared", async importOriginal => {
 });
 
 vi.mock("x402/shared/evm", () => ({
-  getUsdcAddressForChain: vi.fn().mockReturnValue("0x036CbD53842c5426634e7929541eC2318f3dCF7e"),
+  getUsdcAddressForChain: vi.fn().mockReturnValue("0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF"),
 }));
 
 // Mock exact.evm.decodePayment
@@ -278,7 +278,7 @@ describe("paymentMiddleware()", () => {
           mimeType: "application/json",
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           outputSchema,
           extra: {
             name: "USDC",
@@ -311,7 +311,7 @@ describe("paymentMiddleware()", () => {
           mimeType: "application/json",
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           outputSchema,
           extra: {
             name: "USDC",
@@ -371,7 +371,7 @@ describe("paymentMiddleware()", () => {
           mimeType: "application/json",
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           outputSchema,
           extra: {
             name: "USDC",
@@ -411,7 +411,7 @@ describe("paymentMiddleware()", () => {
           mimeType: "application/json",
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           outputSchema,
           extra: {
             name: "USDC",

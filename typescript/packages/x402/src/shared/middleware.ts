@@ -40,14 +40,13 @@ export function computeRoutePatterns(routes: RoutesConfig): RoutePattern[] {
     return {
       verb: verb.toUpperCase(),
       pattern: new RegExp(
-        `^${
-          path
-            // First escape all special regex characters except * and []
-            .replace(/[$()+.?^{|}]/g, "\\$&")
-            // Then handle our special pattern characters
-            .replace(/\*/g, ".*?") // Make wildcard non-greedy and optional
-            .replace(/\[([^\]]+)\]/g, "[^/]+") // Convert [param] to regex capture
-            .replace(/\//g, "\\/") // Escape slashes
+        `^${path
+          // First escape all special regex characters except * and []
+          .replace(/[$()+.?^{|}]/g, "\\$&")
+          // Then handle our special pattern characters
+          .replace(/\*/g, ".*?") // Make wildcard non-greedy and optional
+          .replace(/\[([^\]]+)\]/g, "[^/]+") // Convert [param] to regex capture
+          .replace(/\//g, "\\/") // Escape slashes
         }$`,
         "i",
       ),
@@ -129,10 +128,10 @@ export function getDefaultAsset(network: Network) {
   }
   return {
     address: usdc.usdcAddress,
-    decimals: 6,
+    decimals: 18,
     eip712: {
       name: usdc.usdcName,
-      version: "2",
+      version: "1",
     },
   };
 }

@@ -308,7 +308,7 @@ describe("getDefaultAsset", () => {
     const result = getDefaultAsset("base-sepolia");
 
     expect(result).toEqual({
-      address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      address: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
       decimals: 6,
       eip712: {
         name: "USDC",
@@ -378,7 +378,7 @@ describe("processPriceToAtomicAmount", () => {
     expect(result).toEqual({
       maxAmountRequired: "10000",
       asset: {
-        address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        address: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
         decimals: 6,
         eip712: {
           name: "USDC",
@@ -393,7 +393,7 @@ describe("processPriceToAtomicAmount", () => {
     expect(result).toEqual({
       maxAmountRequired: "10000",
       asset: {
-        address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        address: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
         decimals: 6,
         eip712: {
           name: "USDC",
