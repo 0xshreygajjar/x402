@@ -78,7 +78,7 @@ When a resource server requires payment, it responds with a payment required sig
       "scheme": "exact",
       "network": "base-sepolia",
       "maxAmountRequired": "10000",
-      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "asset": "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
       "payTo": "0x209693Bc6afc0C5328bA36FaF03C514EF312287C",
       "resource": "https://api.example.com/premium-data",
       "description": "Access to premium market data",
@@ -316,7 +316,7 @@ Example with actual data:
     "mimeType": "application/json",
     "payTo": "0x209693Bc6afc0C5328bA36FaF03C514EF312287C",
     "maxTimeoutSeconds": 60,
-    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "asset": "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
     "extra": {
       "name": "USDC",
       "version": "2"
@@ -449,7 +449,7 @@ List discoverable x402 resources from the Bazaar.
           "mimeType": "application/json",
           "payTo": "0x209693Bc6afc0C5328bA36FaF03C514EF312287C",
           "maxTimeoutSeconds": 60,
-          "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "asset": "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           "extra": {
             "name": "USDC",
             "version": "2"
