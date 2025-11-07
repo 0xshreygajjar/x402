@@ -16,6 +16,7 @@ import {
   ExactEvmPayload,
 } from "../../../types/verify";
 import { SCHEME } from "../../exact";
+import { signAuthorization } from "./sign";
 
 /**
  * Verifies a payment payload against the required payment details
@@ -203,6 +204,8 @@ export async function settle<transport extends Transport, chain extends Chain>(
 
   // Returns the original signature (no-op) if the signature is not a 6492 signature
   const { signature } = parseErc6492Signature(payload.signature as Hex);
+  const { v, r, s } = await signAuthorization(wallet, payload.authorization, paymentRequirements);
+
 
   const tx = await wallet.writeContract({
     address: paymentRequirements.asset as Address,
@@ -215,10 +218,14 @@ export async function settle<transport extends Transport, chain extends Chain>(
       BigInt(payload.authorization.validAfter),
       BigInt(payload.authorization.validBefore),
       payload.authorization.nonce as Hex,
-      signature,
+      v,
+      r,
+      s,
     ],
     chain: wallet.chain as Chain,
   });
+
+  console.log("Transaction hash :",tx);
 
   const receipt = await wallet.waitForTransactionReceipt({ hash: tx });
 

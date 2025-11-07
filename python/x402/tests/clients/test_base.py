@@ -27,7 +27,7 @@ def payment_requirements():
     return PaymentRequirements(
         scheme="exact",
         network="base-sepolia",
-        asset="0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        asset="0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
         pay_to="0x0000000000000000000000000000000000000000",
         max_amount_required="10000",
         resource="https://example.com",
@@ -158,7 +158,7 @@ def test_payment_requirements_sorting(client):
     base_req = PaymentRequirements(
         scheme="exact",
         network="base-sepolia",
-        asset="0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        asset="0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
         pay_to="0x0000000000000000000000000000000000000000",
         max_amount_required="10000",
         resource="https://example.com",
@@ -175,7 +175,7 @@ def test_payment_requirements_sorting(client):
     other_req = PaymentRequirements(
         scheme="exact",
         network="base-sepolia",
-        asset="0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        asset="0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
         pay_to="0x0000000000000000000000000000000000000000",
         max_amount_required="10000",
         resource="https://example.com",

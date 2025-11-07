@@ -17,30 +17,30 @@ from x402.types import (
 
 def test_parse_money():
     assert (
-        parse_money("1", "0x036CbD53842c5426634e7929541eC2318f3dCF7e", "base-sepolia")
+        parse_money("1", "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF", "base-sepolia")
         == 1000000
     )
     assert (
-        parse_money("$1", "0x036CbD53842c5426634e7929541eC2318f3dCF7e", "base-sepolia")
+        parse_money("$1", "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF", "base-sepolia")
         == 1000000
     )
     assert (
         parse_money(
-            "$1.12", "0x036CbD53842c5426634e7929541eC2318f3dCF7e", "base-sepolia"
+            "$1.12", "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF", "base-sepolia"
         )
         == 1120000
     )
 
     assert (
         parse_money(
-            "$1.00", "0x036CbD53842c5426634e7929541eC2318f3dCF7e", "base-sepolia"
+            "$1.00", "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF", "base-sepolia"
         )
         == 1000000
     )
 
     assert (
         parse_money(
-            1120000, "0x036CbD53842c5426634e7929541eC2318f3dCF7e", "base-sepolia"
+            1120000, "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF", "base-sepolia"
         )
         == 1120000
     )
@@ -52,7 +52,7 @@ def test_process_price_to_atomic_amount_money():
     amount, address, domain = process_price_to_atomic_amount("$1.00", "base-sepolia")
     assert amount == "1000000"  # 1 USDC = 1,000,000 atomic units (6 decimals)
     assert (
-        address == "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+        address == "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF"
     )  # USDC on base-sepolia
     assert domain["name"] == "USDC"
     assert domain["version"] == "2"
@@ -100,11 +100,11 @@ def test_get_usdc_address():
     """Test getting USDC address for different chain IDs"""
     # Test with string chain ID
     address = get_usdc_address("84532")  # base-sepolia
-    assert address == "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+    assert address == "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF"
 
     # Test with int chain ID
     address = get_usdc_address(84532)  # base-sepolia as int
-    assert address == "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+    assert address == "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF"
 
 
 def test_find_matching_payment_requirements():
@@ -119,7 +119,7 @@ def test_find_matching_payment_requirements():
         mime_type="application/json",
         pay_to="0x1234567890123456789012345678901234567890",
         max_timeout_seconds=300,
-        asset="0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        asset="0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
     )
 
     req2 = PaymentRequirements(

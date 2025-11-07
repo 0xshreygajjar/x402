@@ -84,7 +84,7 @@ vi.mock("x402/shared", async importOriginal => {
 });
 
 vi.mock("x402/shared/evm", () => ({
-  getUsdcAddressForChain: vi.fn().mockReturnValue("0x036CbD53842c5426634e7929541eC2318f3dCF7e"),
+  getUsdcAddressForChain: vi.fn().mockReturnValue("0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF"),
 }));
 
 vi.mock("x402/schemes", () => ({
@@ -327,7 +327,7 @@ describe("paymentMiddleware()", () => {
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
           outputSchema,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           extra: {
             name: "USDC",
             version: "2",
@@ -360,7 +360,7 @@ describe("paymentMiddleware()", () => {
       payTo: "0x1234567890123456789012345678901234567890",
       maxTimeoutSeconds: 300,
       outputSchema,
-      asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
       extra: {
         name: "USDC",
         version: "2",
@@ -420,7 +420,7 @@ describe("paymentMiddleware()", () => {
       payTo: "0x1234567890123456789012345678901234567890",
       maxTimeoutSeconds: 300,
       outputSchema,
-      asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
       extra: {
         name: "USDC",
         version: "2",
@@ -469,7 +469,7 @@ describe("paymentMiddleware()", () => {
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
           outputSchema,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           extra: {
             name: "USDC",
             version: "2",
@@ -514,7 +514,7 @@ describe("paymentMiddleware()", () => {
       payTo: "0x1234567890123456789012345678901234567890",
       maxTimeoutSeconds: 300,
       outputSchema,
-      asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
       extra: {
         name: "USDC",
         version: "2",
@@ -560,7 +560,7 @@ describe("paymentMiddleware()", () => {
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
           outputSchema,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           extra: {
             name: "USDC",
             version: "2",
@@ -606,7 +606,7 @@ describe("paymentMiddleware()", () => {
           payTo: "0x1234567890123456789012345678901234567890",
           maxTimeoutSeconds: 300,
           outputSchema,
-          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
           extra: {
             name: "USDC",
             version: "2",
@@ -662,7 +662,7 @@ describe("paymentMiddleware()", () => {
       payTo: "0x1234567890123456789012345678901234567890",
       maxTimeoutSeconds: 300,
       outputSchema,
-      asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      asset: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
       extra: {
         name: "USDC",
         version: "2",

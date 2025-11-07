@@ -24,7 +24,7 @@ KNOWN_TOKENS = {
     "84532": [
         {
             "human_name": "usdc",
-            "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+            "address": "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
             "name": "USDC",
             "decimals": 6,
             "version": "2",

@@ -87,6 +87,7 @@ app.post("/verify", async (req: Request, res: Response) => {
 });
 
 app.get("/settle", (req: Request, res: Response) => {
+  console.log("Settle endpoint hit:")
   res.json({
     endpoint: "/settle",
     description: "POST to settle x402 payments",
@@ -136,6 +137,8 @@ app.post("/settle", async (req: Request, res: Response) => {
 
     // use the correct private key based on the requested network
     let signer: Signer;
+    console.log("Payment requirements network: ", paymentRequirements.network);
+    console.log("Payment requirement asset check : ", paymentRequirements.asset);
     if (SupportedEVMNetworks.includes(paymentRequirements.network)) {
       signer = await createSigner(paymentRequirements.network, EVM_PRIVATE_KEY);
     } else if (SupportedSVMNetworks.includes(paymentRequirements.network)) {

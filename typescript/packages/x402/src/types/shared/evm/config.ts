@@ -3,7 +3,7 @@ import { Address as SolanaAddress } from "@solana/kit";
 
 export const config: Record<string, ChainConfig> = {
   "84532": {
-    usdcAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    usdcAddress: "0xf4AC82b45bA4C573a6F7BD6944f611C9744fB8fF",
     usdcName: "USDC",
   },
   "8453": {

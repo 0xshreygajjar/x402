@@ -29,10 +29,13 @@ export async function signAuthorization<transport extends Transport, chain exten
   walletClient: SignerWallet<chain, transport> | LocalAccount,
   { from, to, value, validAfter, validBefore, nonce }: ExactEvmPayloadAuthorization,
   { asset, network, extra }: PaymentRequirements,
-): Promise<{ signature: Hex }> {
+): Promise<{
+  signature: Hex;
+  v: number; r: `0x${string}`; s: `0x${string}`
+}> {
   const chainId = getNetworkId(network);
-  const name = extra?.name;
-  const version = extra?.version;
+  const name = "META Forwarder";
+  const version = "1";
 
   const data = {
     types: authorizationTypes,
@@ -55,12 +58,25 @@ export async function signAuthorization<transport extends Transport, chain exten
 
   if (isSignerWallet(walletClient)) {
     const signature = await walletClient.signTypedData(data);
+    // Extract v, r, s from the 65-byte signature
+    const r: `0x${string}` = `0x${signature.slice(2, 66)}` as const;
+    const s: `0x${string}` = `0x${signature.slice(66, 130)}` as const;
+    let v = parseInt(signature.slice(130, 132), 16);
+    if (v < 27) v += 27;
+
     return {
+      r, s, v,
       signature,
     };
   } else if (isAccount(walletClient) && walletClient.signTypedData) {
     const signature = await walletClient.signTypedData(data);
+    const r: `0x${string}` = `0x${signature.slice(2, 66)}` as const;
+    const s: `0x${string}` = `0x${signature.slice(66, 130)}` as const;
+    let v = parseInt(signature.slice(130, 132), 16);
+    if (v < 27) v += 27;
+
     return {
+      r, s, v,
       signature,
     };
   } else {
@@ -76,10 +92,10 @@ export async function signAuthorization<transport extends Transport, chain exten
 export function createNonce(): Hex {
   const cryptoObj =
     typeof globalThis.crypto !== "undefined" &&
-    typeof globalThis.crypto.getRandomValues === "function"
+      typeof globalThis.crypto.getRandomValues === "function"
       ? globalThis.crypto
       : // Dynamic require is needed to support node.js
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        require("crypto").webcrypto;
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require("crypto").webcrypto;
   return toHex(cryptoObj.getRandomValues(new Uint8Array(32)));
 }
