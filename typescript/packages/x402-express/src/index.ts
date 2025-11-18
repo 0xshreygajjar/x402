@@ -107,11 +107,11 @@ export function paymentMiddleware(
       discoverable,
     } = config;
 
-    const atomicAmountsResult = processPriceToAtomicAmount(price, network);
-    if ("error" in atomicAmountsResult) {
-      throw new Error(atomicAmountsResult.error);
+    const atomicAmountForAsset = processPriceToAtomicAmount(price, network);
+    if ("error" in atomicAmountForAsset) {
+      throw new Error(atomicAmountForAsset.error);
     }
-    const atomicAmounts = atomicAmountsResult.results;
+    const { maxAmountRequired, asset } = atomicAmountForAsset;
 
     const resourceUrl: Resource =
       resource || (`${req.protocol}://${req.headers.host}${req.path}` as Resource);
@@ -119,80 +119,77 @@ export function paymentMiddleware(
     let paymentRequirements: PaymentRequirements[] = [];
 
     // TODO: create a shared middleware function to build payment requirements
-    // Generate payment requirements for each asset option
-    for (const { maxAmountRequired, asset } of atomicAmounts) {
-      // evm networks
-      if (SupportedEVMNetworks.includes(network)) {
-        paymentRequirements.push({
-          scheme: "exact",
-          network,
-          maxAmountRequired,
-          resource: resourceUrl,
-          description: description ?? "",
-          mimeType: mimeType ?? "",
-          payTo: getAddress(payTo),
-          maxTimeoutSeconds: maxTimeoutSeconds ?? 60,
-          asset: getAddress(asset.address),
-          // TODO: Rename outputSchema to requestStructure
-          outputSchema: {
-            input: {
-              type: "http",
-              method: req.method.toUpperCase(),
-              discoverable: discoverable ?? true,
-              ...inputSchema,
-            },
-            output: outputSchema,
+    // evm networks
+    if (SupportedEVMNetworks.includes(network)) {
+      paymentRequirements.push({
+        scheme: "exact",
+        network,
+        maxAmountRequired,
+        resource: resourceUrl,
+        description: description ?? "",
+        mimeType: mimeType ?? "",
+        payTo: getAddress(payTo),
+        maxTimeoutSeconds: maxTimeoutSeconds ?? 60,
+        asset: getAddress(asset.address),
+        // TODO: Rename outputSchema to requestStructure
+        outputSchema: {
+          input: {
+            type: "http",
+            method: req.method.toUpperCase(),
+            discoverable: discoverable ?? true,
+            ...inputSchema,
           },
-          extra: (asset as ERC20TokenAmount["asset"]).eip712,
-        });
+          output: outputSchema,
+        },
+        extra: (asset as ERC20TokenAmount["asset"]).eip712,
+      });
+    }
+
+    // svm networks
+    else if (SupportedSVMNetworks.includes(network)) {
+      // get the supported payments from the facilitator
+      const paymentKinds = await supported();
+
+      // find the payment kind that matches the network and scheme
+      let feePayer: string | undefined;
+      for (const kind of paymentKinds.kinds) {
+        if (kind.network === network && kind.scheme === "exact") {
+          feePayer = kind?.extra?.feePayer;
+          break;
+        }
       }
 
-      // svm networks
-      else if (SupportedSVMNetworks.includes(network)) {
-        // get the supported payments from the facilitator
-        const paymentKinds = await supported();
-
-        // find the payment kind that matches the network and scheme
-        let feePayer: string | undefined;
-        for (const kind of paymentKinds.kinds) {
-          if (kind.network === network && kind.scheme === "exact") {
-            feePayer = kind?.extra?.feePayer;
-            break;
-          }
-        }
-
-        // if no fee payer is found, throw an error
-        if (!feePayer) {
-          throw new Error(`The facilitator did not provide a fee payer for network: ${network}.`);
-        }
-
-        paymentRequirements.push({
-          scheme: "exact",
-          network,
-          maxAmountRequired,
-          resource: resourceUrl,
-          description: description ?? "",
-          mimeType: mimeType ?? "",
-          payTo: payTo,
-          maxTimeoutSeconds: maxTimeoutSeconds ?? 60,
-          asset: asset.address,
-          // TODO: Rename outputSchema to requestStructure
-          outputSchema: {
-            input: {
-              type: "http",
-              method: req.method.toUpperCase(),
-              discoverable: discoverable ?? true,
-              ...inputSchema,
-            },
-            output: outputSchema,
-          },
-          extra: {
-            feePayer,
-          },
-        });
-      } else {
-        throw new Error(`Unsupported network: ${network}`);
+      // if no fee payer is found, throw an error
+      if (!feePayer) {
+        throw new Error(`The facilitator did not provide a fee payer for network: ${network}.`);
       }
+
+      paymentRequirements.push({
+        scheme: "exact",
+        network,
+        maxAmountRequired,
+        resource: resourceUrl,
+        description: description ?? "",
+        mimeType: mimeType ?? "",
+        payTo: payTo,
+        maxTimeoutSeconds: maxTimeoutSeconds ?? 60,
+        asset: asset.address,
+        // TODO: Rename outputSchema to requestStructure
+        outputSchema: {
+          input: {
+            type: "http",
+            method: req.method.toUpperCase(),
+            discoverable: discoverable ?? true,
+            ...inputSchema,
+          },
+          output: outputSchema,
+        },
+        extra: {
+          feePayer,
+        },
+      });
+    } else {
+      throw new Error(`Unsupported network: ${network}`);
     }
 
     const payment = req.header("X-PAYMENT");
@@ -203,18 +200,22 @@ export function paymentMiddleware(
     if (!payment) {
       // TODO handle paywall html for solana
       if (isWebBrowser) {
-        // Calculate display amounts for all asset options
-        const displayAmounts = atomicAmounts.map(({ maxAmountRequired, asset }) => {
-          return {
-            amount: Number(maxAmountRequired) / 10 ** asset.decimals,
-            asset: asset,
-          };
-        });
+        let displayAmount: number;
+        if (typeof price === "string" || typeof price === "number") {
+          const parsed = moneySchema.safeParse(price);
+          if (parsed.success) {
+            displayAmount = parsed.data;
+          } else {
+            displayAmount = Number.NaN;
+          }
+        } else {
+          displayAmount = Number(price.amount) / 10 ** price.asset.decimals;
+        }
 
         const html =
           customPaywallHtml ||
           getPaywallHtml({
-            amount: displayAmounts[0].amount, // Use first option as default for backward compatibility
+            amount: displayAmount,
             paymentRequirements: toJsonSafe(paymentRequirements) as Parameters<
               typeof getPaywallHtml
             >[0]["paymentRequirements"],

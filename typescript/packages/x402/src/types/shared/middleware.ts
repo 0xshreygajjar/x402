@@ -58,7 +58,7 @@ export interface SPLTokenAmount {
 export type Price = Money | ERC20TokenAmount | SPLTokenAmount;
 
 export interface RouteConfig {
-  price: Price | Price[]; // Support multiple asset options
+  price: Price;
   network: Network;
   config?: PaymentMiddlewareConfig;
 }

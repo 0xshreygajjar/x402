@@ -40,13 +40,14 @@ export function computeRoutePatterns(routes: RoutesConfig): RoutePattern[] {
     return {
       verb: verb.toUpperCase(),
       pattern: new RegExp(
-        `^${path
-          // First escape all special regex characters except * and []
-          .replace(/[$()+.?^{|}]/g, "\\$&")
-          // Then handle our special pattern characters
-          .replace(/\*/g, ".*?") // Make wildcard non-greedy and optional
-          .replace(/\[([^\]]+)\]/g, "[^/]+") // Convert [param] to regex capture
-          .replace(/\//g, "\\/") // Escape slashes
+        `^${
+          path
+            // First escape all special regex characters except * and []
+            .replace(/[$()+.?^{|}]/g, "\\$&")
+            // Then handle our special pattern characters
+            .replace(/\*/g, ".*?") // Make wildcard non-greedy and optional
+            .replace(/\[([^\]]+)\]/g, "[^/]+") // Convert [param] to regex capture
+            .replace(/\//g, "\\/") // Escape slashes
         }$`,
         "i",
       ),
@@ -139,45 +140,41 @@ export function getDefaultAsset(network: Network) {
 /**
  * Parses the amount from the given price
  *
- * @param price - The price to parse (single Price or array of Prices)
+ * @param price - The price to parse
  * @param network - The network to get the default asset for
- * @returns An array of parsed amounts or an error message
+ * @returns The parsed amount or an error message
  */
 export function processPriceToAtomicAmount(
-  price: Price | Price[],
+  price: Price,
   network: Network,
 ):
-  | { results: Array<{ maxAmountRequired: string; asset: ERC20TokenAmount["asset"] | SPLTokenAmount["asset"] }> }
+  | { maxAmountRequired: string; asset: ERC20TokenAmount["asset"] | SPLTokenAmount["asset"] }
   | { error: string } {
-  // Convert single price to array for uniform processing
-  const prices = Array.isArray(price) ? price : [price];
-  const results: Array<{ maxAmountRequired: string; asset: ERC20TokenAmount["asset"] | SPLTokenAmount["asset"] }> = [];
+  // Handle USDC amount (string) or token amount (ERC20TokenAmount)
+  let maxAmountRequired: string;
+  let asset: ERC20TokenAmount["asset"] | SPLTokenAmount["asset"];
 
-  for (const p of prices) {
-    let maxAmountRequired: string;
-    let asset: ERC20TokenAmount["asset"] | SPLTokenAmount["asset"];
-
-    if (typeof p === "string" || typeof p === "number") {
-      // USDC amount in dollars
-      const parsedAmount = moneySchema.safeParse(p);
-      if (!parsedAmount.success) {
-        return {
-          error: `Invalid price (price: ${p}). Must be in the form "$3.10", 0.10, "0.001", ${parsedAmount.error}`,
-        };
-      }
-      const parsedUsdAmount = parsedAmount.data;
-      asset = getDefaultAsset(network);
-      maxAmountRequired = (parsedUsdAmount * 10 ** asset.decimals).toString();
-    } else {
-      // Token amount in atomic units
-      maxAmountRequired = p.amount;
-      asset = p.asset;
+  if (typeof price === "string" || typeof price === "number") {
+    // USDC amount in dollars
+    const parsedAmount = moneySchema.safeParse(price);
+    if (!parsedAmount.success) {
+      return {
+        error: `Invalid price (price: ${price}). Must be in the form "$3.10", 0.10, "0.001", ${parsedAmount.error}`,
+      };
     }
-
-    results.push({ maxAmountRequired, asset });
+    const parsedUsdAmount = parsedAmount.data;
+    asset = getDefaultAsset(network);
+    maxAmountRequired = (parsedUsdAmount * 10 ** asset.decimals).toString();
+  } else {
+    // Token amount in atomic units
+    maxAmountRequired = price.amount;
+    asset = price.asset;
   }
 
-  return { results };
+  return {
+    maxAmountRequired,
+    asset,
+  };
 }
 
 /**
